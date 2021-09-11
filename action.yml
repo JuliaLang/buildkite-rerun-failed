@@ -1,0 +1,33 @@
+name: 'retry-buildkite'
+description: 'Retry all failed Buildkite jobs (but only the failed jobs) on a pull request.'
+author: 'Dilum Aluthge and contributors'
+
+branding:
+  icon: 'refresh-ccw'
+  color: 'red'
+
+inputs:
+  ### Required inputs
+  buildkite_api_token: # secret
+    description: 'A Buildkite API token with permission to rerun failed jobs.'
+    required: true
+  buildkite_organization_slug:
+    description: 'The Buildkite organization slug.'
+    required: true
+  buildkite_pipeline_slug:
+    description: 'The Buildkite pipeline slug.'
+    required: true
+  pr_number:
+    description: 'The number of the pull request.'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - run: julia --color=yes "$GITHUB_ACTION_PATH"/main.jl
+      shell: bash
+      env:
+        BUILDKITE_API_TOKEN: ${{ inputs.buildkite_api_token }} # secret
+        BUILDKITE_ORGANIZATION_SLUG: ${{ inputs.buildkite_organization_slug }}
+        BUILDKITE_PIPELINE_SLUG: ${{ inputs.buildkite_pipeline_slug }}
+        PR_NUMBER: ${{ inputs.pr_number }}
