@@ -1,0 +1,5 @@
+* @DilumAluthge
+
+CODEOWNERS @DilumAluthge
+/.github/ @DilumAluthge
+/.buildkite/ @DilumAluthge
