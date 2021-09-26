@@ -1,7 +1,8 @@
 function get_build_number(pr_number::AbstractString;
                           organization_slug::AbstractString, pipeline_slug::AbstractString)
     _pr_number = strip(pr_number)
-    isempty(_pr_number) && throw(ArgumentError("You must provide a valid pull request number"))
+    !isempty(_pr_number)                  || throw(ArgumentError("You must provide a valid pull request number"))
+    occursin(r"^[\d][\d]*?$", _pr_number) || throw(ArgumentError("You must provide a valid pull request number"))
     builds_per_page = 100
     max_pages = 100
     for page_number = 1:max_pages
